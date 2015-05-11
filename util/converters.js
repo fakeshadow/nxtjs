@@ -1,4 +1,4 @@
-var converters = function() {
+
 	var charToNibble = {};
 	var nibbleToChar = [];
 	var i;
@@ -17,7 +17,7 @@ var converters = function() {
 		nibbleToChar.push(lowerChar);
 	}
 
-	return {
+        module.exports = {
 		byteArrayToHexString: function(bytes) {
 			var str = '';
 			for (var i = 0; i < bytes.length; ++i) {
@@ -241,4 +241,3 @@ var converters = function() {
 			return converters.intToBytes_(x, 4, 4294967295, opt_bigEndian);
 		}
 	}
-}();

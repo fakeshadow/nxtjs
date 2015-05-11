@@ -1,65 +1,15 @@
-/*
- * jQuery.ajaxMultiQueue - A queue for multiple concurrent ajax requests
- * (c) 2013 Amir Grozki
- * Dual licensed under the MIT and GPL licenses.
- *
- * Based on jQuery.ajaxQueue
- * (c) 2011 Corey Frang
- *
- * Requires jQuery 1.5+
- */
-(function($) {
-	$.ajaxMultiQueue = function(n) {
-		return new MultiQueue(~~n);
-	};
+var BigInteger = require("jsbn"),
+    request = require('request'),
+    jssha256 = require('./util/jssha256.js'),
+    converters = require('./util/converters.js'),
+    curve25519 = require('./util/curve25519.js'),
+    NxtAddress = require('./util/nxtaddress.js');
 
-	function MultiQueue(number) {
-		var queues, i,
-			current = 0;
+module.exports = function() {
 
-		if (!queues) {
-			queues = new Array(number);
+	var Jay = this;
 
-			for (i = 0; i < number; i++) {
-				queues[i] = $({});
-			}
-		}
-
-		function queue(ajaxOpts) {
-			var jqXHR,
-				dfd = $.Deferred(),
-				promise = dfd.promise();
-
-			queues[current].queue(doRequest);
-			current = (current + 1) % number;
-
-			function doRequest(next) {
-				if (ajaxOpts.currentPage && ajaxOpts.currentPage != NRS.currentPage) {
-					next();
-				} else if (ajaxOpts.currentSubPage && ajaxOpts.currentSubPage != NRS.currentSubPage) {
-					next();
-				} else {
-					jqXHR = $.ajax(ajaxOpts);
-
-					jqXHR.done(dfd.resolve)
-						.fail(dfd.reject)
-						.then(next, next);
-				}
-			}
-
-			return promise;
-		};
-
-		return {
-			queue: queue
-		};
-	}
-
-})(jQuery);
-
-var Jay = {};
-
-	Jay.commonNodes = ["69.163.40.132", "jnxt.org","nxt.noip.me","23.88.59.40","162.243.122.251"];
+	Jay.commonNodes = ["69.163.40.132","jnxt.org","nxt.noip.me","23.88.59.40","162.243.122.251"];
 
 	Jay.msTimeout = 1000;
 
@@ -70,8 +20,6 @@ var Jay = {};
 	Jay.requestMethods.cautious = 3;
 	Jay.requestMethods.default = Jay.requestMethods.fastest;
 	Jay.requestMethod = Jay.requestMethods.default;
-
-	Jay.req = $.ajaxMultiQueue(6);
 
 	Jay.singleNode = "";
 	Jay.bestNodes = [];
@@ -91,7 +39,14 @@ var Jay = {};
 		if(onFailure != undefined) obj.error = onFailure;
 		else obj.error = onSuccess;
 		obj.timeout = Jay.msTimeout;
-		Jay.req.queue(obj);
+
+                request.post(obj.url, { form: parameters }, function(err, resp, body){
+                  if(err) {
+                    obj.error(err, "error", { node : node, parameters : parameters });
+                    return;
+                  }
+                  onSuccess(body, "success", { node : node, parameters : parameters });
+                });
 	}
 
 	Jay.setNode = function(nodeName)
@@ -161,10 +116,12 @@ var Jay = {};
 			var vld = [];
 			for(var a=0;a<3;a++)
 			{
+					Jay.nodeScan(function() {
 				Jay.queue(Jay.bestNodes[a], parameters, function(resp, status, xhr) {
 					vld.push(resp);
 					if(vld.length == 3)
 					{
+
 						// compare
 						if(Jay.objectCompare(vld[0], vld[1]))
 						{
@@ -184,6 +141,7 @@ var Jay = {};
 						}
 					}
 				});
+});
 			}
 		}
 	}
@@ -195,7 +153,7 @@ var Jay = {};
 			// search for all things
 			o1.requestProcessingTime = 0;
 			o2.requestProcessingTime = 0;
-			alert(params);
+			//alert(params);
 			return objectEquals(o1, o2);
 		}
 		else
@@ -778,12 +736,10 @@ var Jay = {};
 		return data;
 	}
 
-
-
 var _hash = {
-		init: SHA256_init,
-		update: SHA256_write,
-		getBytes: SHA256_finalize
+		init: jssha256.SHA256_init,
+		update: jssha256.SHA256_write,
+		getBytes: jssha256.SHA256_finalize
 	};
 
 function byteArrayToBigInteger(byteArray, startIndex) {
@@ -807,9 +763,9 @@ function simpleHash(message) {
 var epochNum = 1385294400;
 function getPublicKey(secretPhrase)
 {
-	SHA256_init();
-	SHA256_write(converters.stringToByteArray(secretPhrase));
-	var ky = converters.byteArrayToHexString(curve25519.keygen(SHA256_finalize()).p);
+	jssha256.SHA256_init();
+	jssha256.SHA256_write(converters.stringToByteArray(secretPhrase));
+	var ky = converters.byteArrayToHexString(curve25519.keygen(jssha256.SHA256_finalize()).p);
 
 	return converters.hexStringToByteArray(ky);
 }
@@ -990,3 +946,5 @@ function toByteArray(long) {
         return ret;
 
 	}
+
+};

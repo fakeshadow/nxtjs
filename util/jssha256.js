@@ -330,3 +330,9 @@ function SHA256_Hash_Byte_Block(H, w) {
       
   SHA256_Hash_Word_Block(H, W);
 }
+
+module.exports = {
+  SHA256_init: SHA256_init,
+  SHA256_write: SHA256_write,
+  SHA256_finalize: SHA256_finalize
+};

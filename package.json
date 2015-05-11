@@ -1,0 +1,15 @@
+{
+  "name": "node-jay",
+  "version": "1.0.0",
+  "description": "Node.js version of the Jay Framework",
+  "main": "jay.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "jsbn": "0.0.0",
+    "request": "^2.55.0"
+  }
+}

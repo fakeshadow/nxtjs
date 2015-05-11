@@ -10,8 +10,6 @@
  * Based on work by Daniel J Bernstein, http://cr.yp.to/ecdh.html
  */
 
-var curve25519 = function () {
-
     //region Constants
 
     var KEY_SIZE = 32;
@@ -851,9 +849,8 @@ var curve25519 = function () {
         return { p: P, s: s, k: k };
     }
 
-    return {
+    module.exports = {
         sign: sign,
         verify: verify,
         keygen: keygen
     };
-}();

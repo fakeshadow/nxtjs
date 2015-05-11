@@ -4,7 +4,7 @@
     Version: 1.0, license: Public Domain, coder: NxtChg (admin@nxtchg.com).
 */
 
-function NxtAddress() {
+module.exports = function() {
 	var codeword = [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
 	var syndrome = [0, 0, 0, 0, 0];
 
