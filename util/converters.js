@@ -238,6 +238,6 @@
 
 		},
 		int32ToBytes: function(x, opt_bigEndian) {
-			return converters.intToBytes_(x, 4, 4294967295, opt_bigEndian);
+			return this.intToBytes_(x, 4, 4294967295, opt_bigEndian);
 		}
 	}
