@@ -1,13 +1,15 @@
-var BigInteger = require("jsbn"),
-    request = require('request'),
-    jssha256 = require('./util/jssha256.js'),
-    converters = require('./util/converters.js'),
-    curve25519 = require('./util/curve25519.js'),
-    NxtAddress = require('./util/nxtaddress.js');
+var BigInteger = require('jsbn');
+var request = require('request');
+var jssha256 = require('./util/jssha256.js');
+var converters = require('./util/converters.js');
+var curve25519 = require('./util/curve25519.js');
+var NxtAddress = require('./util/nxtaddress.js');
 
 module.exports = function() {
 
 	var Jay = this;
+
+  Jay.converters = converters;
 
 	Jay.commonNodes = ["69.163.40.132","jnxt.org","nxt.noip.me","23.88.59.40","162.243.122.251"];
 
