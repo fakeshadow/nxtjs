@@ -8,7 +8,7 @@
 
   var epochNum = 1385294400;
 
-  var _hash = {
+  var sha256 = {
     init: jssha256.SHA256_init,
     update: jssha256.SHA256_write,
     getBytes: jssha256.SHA256_finalize,
@@ -31,12 +31,13 @@
 
 
   function publicKeyToAccountId(publicKey, numeric) {
+
     var hex = converters.hexStringToByteArray(publicKey);
 
-    _hash.init();
-    _hash.update(hex);
+    sha256.init();
+    sha256.update(hex);
 
-    var account = _hash.getBytes();
+    var account = sha256.getBytes();
     account = converters.byteArrayToHexString(account);
     var slice = (converters.hexStringToByteArray(account)).slice(0, 8);
     var accountId = byteArrayToBigInteger(slice).toString();
@@ -166,9 +167,9 @@
    */
 
   function simpleHash(message) {
-    _hash.init();
-    _hash.update(message);
-    return _hash.getBytes();
+    sha256.init();
+    sha256.update(message);
+    return sha256.getBytes();
   };
 
 
@@ -222,11 +223,11 @@
 
 
   function getPublicKey(secretPhrase) {
-    _hash.init();
-    _hash.update(converters.stringToByteArray(secretPhrase));
+    sha256.init();
+    sha256.update(converters.stringToByteArray(secretPhrase));
     var ky = converters.byteArrayToHexString(
       curve25519.keygen(
-        _hash.getBytes()
+        sha256.getBytes()
       ).p
     );
     return converters.hexStringToByteArray(ky);
@@ -241,17 +242,17 @@
     var s = curve25519.keygen(digest).s;
 
     var m = simpleHash(messageBytes);
-    _hash.init();
-    _hash.update(m);
-    _hash.update(s);
-    var x = _hash.getBytes();
+    sha256.init();
+    sha256.update(m);
+    sha256.update(s);
+    var x = sha256.getBytes();
 
     var y = curve25519.keygen(x).p;
 
-    _hash.init();
-    _hash.update(m);
-    _hash.update(y);
-    var h = _hash.getBytes();
+    sha256.init();
+    sha256.update(m);
+    sha256.update(y);
+    var h = sha256.getBytes();
 
     var v = curve25519.sign(h, x, s);
     return v.concat(h);
@@ -268,10 +269,10 @@
 
     var m = simpleHash(messageBytes);
 
-    _hash.init();
-    _hash.update(m);
-    _hash.update(y);
-    var h2 = _hash.getBytes();
+    sha256.init();
+    sha256.update(m);
+    sha256.update(y);
+    var h2 = sha256.getBytes();
 
     return areByteArraysEqual(h, h2);
   };
