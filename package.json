@@ -1,16 +1,15 @@
 {
-  "name": "node-jay",
-  "version": "1.0.0",
-  "description": "Node.js version of the Jay Framework",
-  "main": "jay.js",
+  "name": "nxtjs",
+  "version": "0.0.1",
+  "description": "Local transaction signing and token creation/validation",
+  "main": "index.js",
   "scripts": {
     "test": "mocha test"
   },
-  "author": "",
+  "author": "toenu <toenu23@gmail.com>",
   "license": "MIT",
   "dependencies": {
-    "jsbn": "0.0.0",
-    "request": "^2.55.0"
+    "jsbn": "0.0.0"
   },
   "devDependencies": {
     "mocha": "^3.1.2"
