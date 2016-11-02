@@ -288,6 +288,7 @@
     getNxtTime: getNxtTime,
     secretPhraseToPublicKey: secretPhraseToPublicKey,
     publicKeyToAccountId: publicKeyToAccountId,
+    secretPhraseToAccountId: secretPhraseToAccountId,
     signTransactionBytes: signTransactionBytes,
     createToken: createToken,
     parseToken: parseToken,
