@@ -132,7 +132,7 @@
       return converters.byteArrayToHexString(pubKey);
     },
 
-    publicKeyToAccountId: function(publicKey, RSFormat) {
+    publicKeyToAccountId: function(publicKey, numeric) {
       var hex = converters.hexStringToByteArray(publicKey);
 
       _hash.init();
@@ -143,7 +143,7 @@
       var slice = (converters.hexStringToByteArray(account)).slice(0, 8);
       var accountId = byteArrayToBigInteger(slice).toString();
 
-      if (!RSFormat) {
+      if (numeric) {
         return accountId;
       }
       var address = new NxtAddress();
