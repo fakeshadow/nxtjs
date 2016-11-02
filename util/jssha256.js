@@ -1,3 +1,5 @@
+(function(){
+
 /*
  *  jssha256 version 0.1  -  Copyright 2006 B. Poettering
  *
@@ -336,3 +338,5 @@ module.exports = {
   SHA256_write: SHA256_write,
   SHA256_finalize: SHA256_finalize
 };
+
+})();

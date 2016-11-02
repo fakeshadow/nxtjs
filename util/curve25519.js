@@ -1,3 +1,5 @@
+(function() {
+
 /* Ported to JavaScript from Java 07/01/14.
  *
  * Ported from C to Java by Dmitry Skiba [sahn0], 23/02/08.
@@ -854,3 +856,5 @@
         verify: verify,
         keygen: keygen
     };
+
+ })();
