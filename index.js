@@ -53,6 +53,12 @@
   };
 
 
+  function secretPhraseToAccountId(secretPhrase, numeric) {
+    var pubKey = secretPhraseToPublicKey(secretPhrase);
+    return publicKeyToAccountId(pubKey, numeric);
+  };
+
+
   function signTransactionBytes(data, secretPhrase) {
 
     var unsignedBytes = converters.hexStringToByteArray(data);
