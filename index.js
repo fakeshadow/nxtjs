@@ -119,20 +119,20 @@
     return areByteArraysEqual(h, h2);
   };
 
-  module.exports = function() {
+  module.exports = {
 
-    this.getNxtTime = function() {
+    getNxtTime: function() {
       return Math.floor(Date.now() / 1000) - epochNum;
-    }
+    },
 
-    this.secretPhraseToPublicKey = function(secretPhrase) {
+    secretPhraseToPublicKey: function(secretPhrase) {
       var secretPhraseBytes = converters.stringToByteArray(secretPhrase);
       var digest = simpleHash(secretPhraseBytes);
       var pubKey = curve25519.keygen(digest).p;
       return converters.byteArrayToHexString(pubKey);
-    }
+    },
 
-    this.publicKeyToAccountId = function(publicKey, RSFormat) {
+    publicKeyToAccountId: function(publicKey, RSFormat) {
       var hex = converters.hexStringToByteArray(publicKey);
 
       _hash.init();
@@ -151,9 +151,9 @@
         return '';
       }
       return address.toString();
-    }
+    },
 
-    this.signTransactionBytes = function(data, secretPhrase) {
+    signTransactionBytes: function(data, secretPhrase) {
 
       var unsignedBytes = converters.hexStringToByteArray(data);
       var sig = signBytes(unsignedBytes, secretPhrase);
@@ -163,9 +163,9 @@
       signed = signed.concat(unsignedBytes.slice(96 + 64));
 
       return converters.byteArrayToHexString(signed);
-    };
+    },
 
-    this.createToken = function(websiteString, secretPhrase) {
+    createToken: function(websiteString, secretPhrase) {
       var hexwebsite = converters.stringToHexString(websiteString);
       var website = converters.hexStringToByteArray(hexwebsite);
       var data = [];
@@ -212,9 +212,9 @@
       }
 
       return buf;
-    };
+    },
 
-    this.parseToken = function(tokenString, website) {
+    parseToken: function(tokenString, website) {
       var websiteBytes = converters.stringToByteArray(website);
       var tokenBytes = [];
       var i = 0;
@@ -258,7 +258,7 @@
       ret.accountRS = this.publicKeyToAccountId(ret.publicKey, true);
 
       return ret;
-    };
+    },
 
   };
 
