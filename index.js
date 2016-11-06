@@ -1,18 +1,12 @@
 (function() {
 
+  var crypto = require('crypto');
   var BigInteger = require('jsbn');
-  var jssha256 = require('./util/jssha256.js');
   var converters = require('./util/converters.js');
   var curve25519 = require('./util/curve25519.js');
   var NxtAddress = require('./util/nxtaddress.js');
 
   var epochNum = 1385294400;
-
-  var sha256 = {
-    init: jssha256.SHA256_init,
-    update: jssha256.SHA256_write,
-    getBytes: jssha256.SHA256_finalize,
-  };
 
   /**
    * Public functions
@@ -33,11 +27,9 @@
   function publicKeyToAccountId(publicKey, numeric) {
 
     var hex = converters.hexStringToByteArray(publicKey);
+    var buf = Buffer.from(hex)
+    var account = crypto.createHash('sha256').update(buf).digest();
 
-    sha256.init();
-    sha256.update(hex);
-
-    var account = sha256.getBytes();
     account = converters.byteArrayToHexString(account);
     var slice = (converters.hexStringToByteArray(account)).slice(0, 8);
     var accountId = byteArrayToBigInteger(slice).toString();
@@ -173,9 +165,9 @@
    */
 
   function simpleHash(message) {
-    sha256.init();
-    sha256.update(message);
-    return sha256.getBytes();
+    var buf = Buffer.from(message);
+    var hash = crypto.createHash('sha256').update(buf).digest('hex');
+    return converters.hexStringToByteArray(hash)
   };
 
 
@@ -229,11 +221,10 @@
 
 
   function getPublicKey(secretPhrase) {
-    sha256.init();
-    sha256.update(converters.stringToByteArray(secretPhrase));
+    var hash = crypto.createHash('sha256').update(secretPhrase);
     var ky = converters.byteArrayToHexString(
       curve25519.keygen(
-        sha256.getBytes()
+        hash.digest()
       ).p
     );
     return converters.hexStringToByteArray(ky);
@@ -246,19 +237,24 @@
 
     var digest = simpleHash(secretPhraseBytes);
     var s = curve25519.keygen(digest).s;
-
     var m = simpleHash(messageBytes);
-    sha256.init();
-    sha256.update(m);
-    sha256.update(s);
-    var x = sha256.getBytes();
+
+    var hash = crypto.createHash('sha256');
+    var mBuf = Buffer.from(m);
+    var sBuf = Buffer.from(s);
+    hash.update(mBuf)
+    hash.update(sBuf)
+    var x = hash.digest()
 
     var y = curve25519.keygen(x).p;
 
-    sha256.init();
-    sha256.update(m);
-    sha256.update(y);
-    var h = sha256.getBytes();
+    hash = crypto.createHash('sha256');
+    var yBuf = Buffer.from(y)
+    hash.update(mBuf)
+    hash.update(yBuf)
+    var h = converters.hexStringToByteArray(
+      hash.digest('hex')
+    );
 
     var v = curve25519.sign(h, x, s);
     return v.concat(h);
@@ -271,14 +267,15 @@
     var publicKeyBytes = publicKey;
     var v = signatureBytes.slice(0, 32);
     var h = signatureBytes.slice(32);
-    var y = curve25519.verify(v, h, publicKeyBytes);
+    var y = Buffer.from(
+      curve25519.verify(v, h, publicKeyBytes)
+    );
 
-    var m = simpleHash(messageBytes);
-
-    sha256.init();
-    sha256.update(m);
-    sha256.update(y);
-    var h2 = sha256.getBytes();
+    var m = Buffer.from(simpleHash(messageBytes));
+    var hash = crypto.createHash('sha256');
+    hash.update(m);
+    hash.update(y);
+    var h2 = hash.digest();
 
     return areByteArraysEqual(h, h2);
   };
