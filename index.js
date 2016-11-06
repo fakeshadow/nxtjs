@@ -17,20 +17,18 @@
 
 
   function secretPhraseToPublicKey(secretPhrase) {
-    var secretPhraseBytes = converters.stringToByteArray(secretPhrase);
-    var digest = simpleHash(secretPhraseBytes);
-    var pubKey = curve25519.keygen(digest).p;
+    var hash = converters.hexStringToByteArray(
+      simpleHash(secretPhrase, 'hex')
+    );
+    var pubKey = curve25519.keygen(hash).p;
     return converters.byteArrayToHexString(pubKey);
   };
 
 
   function publicKeyToAccountId(publicKey, numeric) {
+    var arr = converters.hexStringToByteArray(publicKey);
+    var account = simpleHash(arr, 'hex');
 
-    var hex = converters.hexStringToByteArray(publicKey);
-    var buf = Buffer.from(hex)
-    var account = crypto.createHash('sha256').update(buf).digest();
-
-    account = converters.byteArrayToHexString(account);
     var slice = (converters.hexStringToByteArray(account)).slice(0, 8);
     var accountId = byteArrayToBigInteger(slice).toString();
 
@@ -163,11 +161,11 @@
   /**
    * Private functions
    */
-
-  function simpleHash(message) {
-    var buf = Buffer.from(message);
-    var hash = crypto.createHash('sha256').update(buf).digest('hex');
-    return converters.hexStringToByteArray(hash)
+  function simpleHash(message, encoding) {
+    if (message instanceof Array) {
+      message = Buffer.from(message);
+    }
+    return crypto.createHash('sha256').update(message).digest(encoding);
   };
 
 
