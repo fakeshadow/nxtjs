@@ -912,6 +912,6 @@ curve25519_verify = function(Y, v, h, P) {
 }
 
 module.exports = {
-  'curve25519_' : curve25519_,
-  'curve25519_clamp' : curve25519_clamp
+  curve25519 : curve25519_,
+  clamp : curve25519_clamp
 };
