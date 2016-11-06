@@ -8,10 +8,27 @@ Small collection of JavaScript functions for Nxt. Allows for local signing of tr
 `npm test`
 
 ### Usage
+##### node.js:
+
     var nxtjs = require('nxtjs');
 
     // Create an account
     var acc = nxtjs.secretPhraseToAccountId('secret');
+    console.log(acc);
+    
+##### Browser:
+
+Create the bundle with browserify:
+
+`browserify index.js -s nxtjs > build/nxtjs.js`
+
+Use in HTML file:
+
+    <script src="nxtjs.js"></script>
+    <script>
+        var acc = nxtjs.secretPhraseToAccountId('secret');
+        console.log(acc);
+    </script>
 
 ### Functions
 #### secretPhraseToPublicKey(secretPhrase)
