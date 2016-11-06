@@ -2,7 +2,7 @@
 
   var account = require('./lib/account');
   var token = require('./lib/token');
-  var encryption = require('./lib/encryption')
+  var encryption = require('./lib/encryption');
 
   module.exports = {
     secretPhraseToPublicKey: account.secretPhraseToPublicKey,
