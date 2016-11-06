@@ -57,3 +57,24 @@ describe('token', function() {
     done();
   });
 });
+
+
+describe('message encryption', function() {
+  it('encrypt and decrypt a message', function(done) {
+
+    var secretPhraseRecp = 'It was a bright cold day in April, and the clocks were striking thirteen.';
+    var publicKeyRecp = '1259ec21d31a30898d7cd1609f80d9668b4778e3d97e941044b39f0c44d2e51b';
+    var secretPhraseSender = 'test';
+    var publicKeySender = 'd9d5c57971eefb085e3abaf7a5a4a6cdb8185f30105583cdb09ad8f61886ec65';
+    var message = 'hello world';
+    var result = nxt.encryptMessage(message, publicKeyRecp, secretPhraseSender);
+    var decrypted = nxt.decryptMessage(
+      result.message,
+      result.nonce,
+      publicKeySender,
+      secretPhraseRecp
+    );
+    assert.equal(decrypted, message);
+    done();
+  });
+});
