@@ -6,6 +6,7 @@
   var encryption = require('./lib/encryption');
 
   module.exports = {
+    rsConvert: account.rsConvert,
     secretPhraseToPublicKey: account.secretPhraseToPublicKey,
     publicKeyToAccountId: account.publicKeyToAccountId,
     secretPhraseToAccountId: account.secretPhraseToAccountId,
@@ -27,6 +28,15 @@
   var NxtAddress = require('../util/nxtaddress.js');
   var helpers = require('./helpers')
 
+
+  function rsConvert(address) {
+    var addr = new NxtAddress();
+    addr.set(address);
+    return {
+      account: addr.account_id(),
+      accountRS: addr.toString(),
+    };
+  };
 
   function secretPhraseToPublicKey(secretPhrase, asByteArray) {
     var hash = helpers.hexStringToByteArray(
@@ -107,6 +117,7 @@
 
 
   module.exports = {
+    rsConvert: rsConvert,
     secretPhraseToPublicKey: secretPhraseToPublicKey,
     publicKeyToAccountId: publicKeyToAccountId,
     secretPhraseToAccountId: secretPhraseToAccountId,
