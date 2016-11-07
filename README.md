@@ -58,3 +58,13 @@ Returns an object with the keys `nonce` and `message`
 
 #### decryptMessage(cipherText, nonce, senderPublicKey, recipientSecretPhrase)
 Returns the deciphered text as string
+
+#### rsConvert(address)
+Converts address in numeric format to Reed-Solomon format, or vice versa. Returns an object with the keys `account` and `accountRS`
+
+
+### Credits
+The purpose of this repo is to consolidate code from multiple sources into one easy to use package for node.js and the browser.
+Original code was taken from:
+* [NRS client](https://bitbucket.org/JeanLucPicard/nxt/)
+* [Jay] (https://github.com/jonesnxt/jay) (Token functions)
