@@ -3,6 +3,14 @@ var nxt = require('../index.js');
 
 describe('account', function() {
 
+  it('converts RS to numeric and back', function(done) {
+    var acc = 'NXT-MRCC-2YLS-8M54-3CMAJ';
+    var result = nxt.rsConvert(acc);
+    var result2 = nxt.rsConvert(result.account);
+    assert.equal(result2.accountRS, acc);
+    done();
+  });
+
   it('get public key from secret phrase', function(done) {
     var pubkey = nxt.secretPhraseToPublicKey(
       'It was a bright cold day in April, and the clocks were striking thirteen.'

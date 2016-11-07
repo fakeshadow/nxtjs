@@ -5,6 +5,7 @@
   var encryption = require('./lib/encryption');
 
   module.exports = {
+    rsConvert: account.rsConvert,
     secretPhraseToPublicKey: account.secretPhraseToPublicKey,
     publicKeyToAccountId: account.publicKeyToAccountId,
     secretPhraseToAccountId: account.secretPhraseToAccountId,
