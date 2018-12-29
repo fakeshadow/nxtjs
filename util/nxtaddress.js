@@ -256,7 +256,7 @@ module.exports = function() {
 	} //__________________________
 
 	this.toString = function() {
-		var out = 'NXT-';
+		var out = 'PXS-';
 
 		for (var i = 0; i < 17; i++) {
 			out += alphabet[codeword[cwmap[i]]];
@@ -311,7 +311,7 @@ module.exports = function() {
 
 		adr = adr.replace(/(^\s+)|(\s+$)/g, '').toUpperCase();
 
-		if (adr.indexOf('NXT-') == 0) adr = adr.substr(4);
+		if (adr.indexOf('PXS-') == 0) adr = adr.substr(4);
 
 		if (adr.match(/^\d{1,20}$/g)) // account id
 		{
